@@ -24,7 +24,7 @@
 ------------
 
 
-|POST`/login` |
+|POST `/login` |
 | ------------ |
 | Метод позволяет пользователям отправлять запросы в API Quickex. Чтобы зарегистрироваться в качестве клиента, пожалуйста, свяжитесь с нашей   [службой технической поддержки](mailto:support@quickex.io "технической поддержки").  Подключение бесплатное, коммиссия Quickex составляет 0,5% и уже включена в курс. Дополнительную коммиссию Вы можете установить самостоятельно|
 
@@ -66,7 +66,7 @@ Body
 
 #### **Rate**
 
-|GET`/rate/{currencyPair}`|
+|GET `/rate/{currencyPair}`|
 | ------------ |
 | Этот запрос получает текущий курс. Эта ставка не включает комиссию за транзакцию (майнер), взимаемую с каждой транзакции. |
 
@@ -76,7 +76,7 @@ Body
 #### **Параметры URI**
 
 **currencyPair**    `string` (обязательно) Пример: `eth_btc`
-    Валютная пара
+Валютная пара
 
 
 **Ответ**  `200`
@@ -150,7 +150,7 @@ Schema
 
 #### Депозитный лимит
 
-|GET` /limit/{currencyPair`|
+|GET ` /limit/{currencyPair}`|
 | ------------ |
 |Этот запрос получает ограничение на количество базовой валюты, которое может быть обменено, как установлено Quickex в данный момент. Любая избыточная сумма будет отправлена ​​на адрес возврата. Это значение может быть изменено из-за внезапных колебаний рынка.|
 
@@ -160,7 +160,7 @@ Schema
 #### **Параметры URI**
 
 **currencyPair**         `string` (обязательно) Пример: `eth_btc`
-    Валютная пара
+Валютная пара
 
 **Ответ**  `200`
 
@@ -249,7 +249,7 @@ Schema
 
 #### Marketinfo
 
-|GET` /marketinfo/{currencyPair}`|
+|GET ` /marketinfo/{currencyPair}`|
 | ------------ |
 |Этот запрос получает текущие данные рынка.|
 
@@ -260,7 +260,7 @@ Schema
 #### **Параметры URI**
 
 **currencyPair**         `string` (обязательно) Пример: `eth_btc`
-    Валютная пара
+Валютная пара
 
 **Ответ**  `200`
 
@@ -389,7 +389,7 @@ Schema
 ------------
 #### Информация о запросе на обмен
 
-|GET`/txStat/{depositAddress}/{tag}`|
+|GET `/txStat/{depositAddress}/{tag}`|
 | ------------ |
 |Этот запрос получает детали транзакции по адресу депозита, указанному в транзакции  обмена|
 
@@ -404,7 +404,7 @@ Schema
 
 
 **tag**    `string` (необязательно) Пример: `123321`
-    Тег назначения 
+Тег назначения 
 
 **Ответ**  `200`
 
@@ -641,7 +641,7 @@ Schema
 
 #### Монеты
 
-|GET`/getcoins`|
+|GET `/getcoins`|
 | ------------ |
 |Этот запрос позволяет получить список всех валют, которые в настоящее время поддерживает Quickex.|
 
@@ -803,6 +803,259 @@ Schema
         "error"
       ]
     }
+
+
+------------
+
+#### Получить список последних транзакций
+
+|GET `/recenttx/{max}`|
+| ------------ |
+|Этот запрос получает список самых последних транзакций.|
+
+
+#### **Пример URI**
+**GET** `https://api.quickex.io/recenttx/5`
+
+#### **Параметры URI**
+
+**max**    `number` (не обязательно) Пример: 5
+
+  Максимальное количество транзакций для возврата. Если параметр не указан, будет возвращено 5 транзакций. Кроме того, параметр должен быть числом от 1 до 50 (включительно)..
+
+
+
+**Ответ**  `200`
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    [
+      {
+        "txid": "613d76d3-2f72-4003-844e-92b6dd160432",
+        "amount": 0.00191317,
+        "curIn": "ETH",
+        "curOut": "ETC",
+        "timestamp": "1536307658"
+      }
+    ]
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "array"
+    }
+
+
+**Ответ**  `400`
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Recent transaction list is currently unavailable."
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+------------
+
+#### Получить список транзакций с закрытым ключом API
+
+|GET `/txbyapikey/{apikey}`|
+| ------------ |
+|Этот запрос получает список транзакций по закрытому ключу API. Это позволяет партнерам получать список всех транзакций, которые когда-либо были созданы с определенным ключом API. Транзакции создаются с открытым партнерским ключом, но их ищет соответствующий закрытый ключ. Использование открытых и закрытых ключей защищает конфиденциальность данных аккаунта наших партнеров.|
+
+
+#### **Пример URI**
+**GET** `https://api.quickex.io/txbyapikey/23efa324efb213a`
+
+#### **Параметры URI**
+
+**apikey**   `string` (обязательно) Пример:` 23efa324efb213a`
+Является ли приватный ключ API партнера. 
+
+**Ответ**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    [
+      {
+        "inputTXID": "5306c5ed-38b6-4da0-a1c8-0e78b725ddc9",
+        "inputAddress": "0x56Dc35da0Bd2776c024Fbc14eB15CbE105059696",
+        "inputCurrency": "ETH",
+        "inputAmount": 0.0025,
+        "outputTXID": "311c56a08b3444894373476f9576a62987078fb8499878b9ca0264e893622863",
+        "outputAddress": "3771GPPSfDixm3cy3dM6GvjzKYYqXRmQCD",
+        "outputCurrency": "BTC",
+        "outputAmount": 0.00310434,
+        "status": "time_expired",
+        "destinationTag": "123",
+        "withdrawalTag": "1234"
+      }
+    ]
+    
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "": {
+          "type": "object",
+          "properties": {
+            "inputTXID": {
+              "type": "string",
+              "description": "Transaction id"
+            },
+            "inputAddress": {
+              "type": "string",
+              "description": "Input address"
+            },
+            "inputCurrency": {
+              "type": "string",
+              "description": "Input currency"
+            },
+            "inputAmount": {
+              "type": "number",
+              "description": "Input amount"
+            },
+            "outputTXID": {
+              "type": "string",
+              "description": "Transaction hash"
+            },
+            "outputAddress": {
+              "type": "string",
+              "description": "Output address"
+            },
+            "outputCurrency": {
+              "type": "string",
+              "description": "Output currency"
+            },
+            "outputAmount": {
+              "type": "number",
+              "description": "Output amount"
+            },
+            "status": {
+              "type": "string",
+              "description": "Transaction status"
+            },
+            "destinationTag": {
+              "type": "string",
+              "description": "Destination tag"
+            },
+            "withdrawalTag": {
+              "type": "string",
+              "description": "Withdrawal tag"
+            }
+          },
+          "required": [
+            "inputTXID",
+            "inputAddress",
+            "inputCurrency",
+            "inputAmount",
+            "outputTXID",
+            "outputAddress",
+            "outputCurrency",
+            "outputAmount",
+            "status"
+          ]
+        }
+      }
+    }
+
+**Ответ**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't find transactions"
+    }
+    
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+
+
+------------
+
+#### Получить список транзакций с конкретным адресом для вывода средств и приватным ключом API 
+
+|GET `txbyaddress/{withdrawalAddress}/{apikey}/{destinationTag}`|
+| ------------ |
+|Этот запрос позволяет партнерам получать список всех транзакций, которые когда-либо отправлялись на один из их адресов, в частности. Необходимо предоставить личный ключ партнера. Это позволяет получить список транзакций, которые были отправлены на определенный адрес назначения и были созданы с использованием открытого ключа партнера.|
+
+
+#### **Пример URI**
+**GET** `https://api.quickex.io/txbyaddress/3771GPPSfDixm3cy3dM6GvjzKYYqXRmQCD/23efa324efb213a/123321`
+
+#### **Параметры URI**
+
+
 
 
 
