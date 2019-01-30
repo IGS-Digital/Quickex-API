@@ -1256,19 +1256,17 @@ Schema
 **Request** `with body`
 
 
+- withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (обязательно) - Адрес получателя
 
+- pair: `eth_btc` (обязательно) - Валютные пары
 
--     withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (обязательно) - Адрес получателя
+- returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (обязательно) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
 
--     pair: `eth_btc` (обязательно) - Валютные пары
+- destinationTag: `destination tag` (необязательно) - тег назначения
 
--     returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (обязательно) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
+- withdrawalTag: `withdrawal tag` (необязательно) - withdrawal tag
 
--     destinationTag: `destination tag` (необязательно) - тег назначения
-
--     withdrawalTag: `withdrawal tag` (необязательно) - withdrawal tag
-
--     apiKey: `234eac2234a423f` (необязательно) - Публичный api ключ
+- apiKey: `234eac2234a423f` (необязательно) - Публичный api ключ
 
 Headers
 
@@ -1428,17 +1426,16 @@ Schema
 > Предупреждение! ¶
 Если параметр `` depositAmount` пропущен, то  `amount` не используется.
 
--  withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (required, string) - Адрес получателя
+- withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (required, string) - Адрес получателя
 
--  pair: `eth_btc` (required, string) - Пары обмена 
+- pair: `eth_btc` (required, string) - Пары обмена 
 
--     returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
+- returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
 
-    destinationTag: `destination tag` (optional, string) - destination tag
+- destinationTag: `destination tag` (optional, string) - destination tag
 
-    withdrawalTag: `withdrawal tag` (optional, string) - withdrawal tag
-
-    apiKey: `234eac2234a423f` (optional, string) - Публичный api ключ
+- withdrawalTag: `withdrawal tag` (optional, string) - withdrawal tag
+- apiKey: `234eac2234a423f` (optional, string) - Публичный api ключ
 
 **Response**  `201`
 
