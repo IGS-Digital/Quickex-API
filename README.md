@@ -1253,7 +1253,42 @@ Schema
 
 #### **Параметры URI**
 
-**Request ** `with body`
+**Request** `with body`
+
+
+- withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (обязательно) - Адрес получателя
+
+- pair: `eth_btc` (обязательно) - Валютные пары
+
+- returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (обязательно) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
+
+- destinationTag: `destination tag` (необязательно) - тег назначения
+
+- withdrawalTag: `withdrawal tag` (необязательно) - withdrawal tag
+
+- apiKey: `234eac2234a423f` (необязательно) - Публичный api ключ
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+    
+    {
+      "withdrawal": "12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct",
+      "pair": "eth_btc",
+      "returnAddress": "0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE",
+      "destinationTag": "destination tag",
+      "withdrawalTag": "withdrawal tag",
+      "apiKey": "234eac2234a423f"
+    }
+    
+
+
 
 **Response**  `200`
 
@@ -1365,8 +1400,170 @@ Schema
 
 ------------
 
+#### Создать фиксированную транзакцию  
+
+|POST `/sendamount|
+| ------------ |
+|Позволяет пользователям запрашивать фиксированную сумму для отправки на адрес вывода. Вы указываете адрес для вывода средств и сумму, которую хотите отправить на него. Мы возвращаем сумму, которую вы хотите снять, и адрес, на который эта сумма должна быть отправлена, и ждем вашего подтверждения|
+
+
+#### **Пример URI**
+**POST** ` https://api.quickex.io / sendamount`
+
+#### **Параметры URI**
+
+**Request** `with body`
+
+
+- amount: `0.03101415` (необязательно) - Сумма вывода, сумма, которую вы получите после обмена
+
+> Предупреждение! ¶
+Если параметр `amount` пропущен, то  `depositAmount` не используется.
+
+- depositAmount: `1` (optional, number) - Сумма депозита, сумма, которую вы отправляете на обмен
+
+
+> Предупреждение! ¶
+Если параметр `` depositAmount` пропущен, то  `amount` не используется.
+
+- withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (required, string) - Адрес получателя
+
+- pair: `eth_btc` (required, string) - Пары обмена 
+
+- returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
+
+- destinationTag: `destination tag` (optional, string) - destination tag
+
+- withdrawalTag: `withdrawal tag` (optional, string) - withdrawal tag
+- apiKey: `234eac2234a423f` (optional, string) - Публичный api ключ
+
+**Response**  `201`
+
+Headers
 
 
 
+    Content-Type: application/json
 
+Body
+
+
+
+    {
+      "pair": "eth_btc",
+      "withdrawal": "qpjs462knq4anmpyyf7axypplff5s4dyyql0k9rlkc",
+      "withdrawalAmount": 0.001,
+      "expiration": 1540456968,
+      "maxLimit": 10,
+      "deposit": "0x886C0620d8A59DD5D53946644a1D91326862D1e7",
+      "depositAmount": 0.002,
+      "quotedRate": 1,
+      "orderId": "678492f6-2944-45ba-b031-8ce9f4b14141",
+      "apiPubKey": "abe1278ac423349e775",
+      "destinationTag": "destination tag",
+      "withdrawalTag": "withdrawal tag"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "pair": {
+          "type": "string",
+          "description": "Currency pair"
+        },
+        "withdrawal": {
+          "type": "string",
+          "description": "Withdrawal address"
+        },
+        "withdrawalAmount": {
+          "type": "number",
+          "description": "Withdrawal amount, amount you get after exchange"
+        },
+        "expiration": {
+          "type": "number",
+          "description": "Expiration time for deposit"
+        },
+        "maxLimit": {
+          "type": "number",
+          "description": "Max limit for deposit"
+        },
+        "deposit": {
+          "type": "string",
+          "description": "Deposit address"
+        },
+        "depositAmount": {
+          "type": "number",
+          "description": "Deposit amount, amount you send to exchange"
+        },
+        "quotedRate": {
+          "type": "number",
+          "description": "Quoted rate"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Order id"
+        },
+        "apiPubKey": {
+          "type": "string",
+          "description": "Public api key"
+        },
+        "destinationTag": {
+          "type": "string",
+          "description": "destination tag"
+        },
+        "withdrawalTag": {
+          "type": "string",
+          "description": "withdrawal tag"
+        }
+      },
+      "required": [
+        "pair",
+        "withdrawal",
+        "withdrawalAmount",
+        "expiration",
+        "maxLimit",
+        "deposit",
+        "depositAmount",
+        "quotedRate",
+        "orderId"
+      ]
+    }
+**Response**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't create fixed amount transaction"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
 
