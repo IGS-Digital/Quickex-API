@@ -43,7 +43,7 @@
 
 
 
-**Ответ** `201`
+**Response** `201`
 
 Headers
 
@@ -59,12 +59,12 @@ Body
 
 ------------
 
-### ПОЛУЧИТЬ КУРСЫ 
+### GET REQUESTS
 
 ------------
 
 
-#### **Rate**
+#### **Курсы**
 
 |GET `/rate/{currencyPair}`|
 | ------------ |
@@ -79,7 +79,7 @@ Body
 Валютная пара
 
 
-**Ответ**  `200`
+**Response**  `200`
 
 
     {
@@ -110,7 +110,7 @@ Schema
       ]
     }
 
-**Ответ**  `400`
+**Response**  `400`
 
 Headers
 
@@ -162,7 +162,7 @@ Schema
 **currencyPair**         `string` (обязательно) Пример: `eth_btc`
 Валютная пара
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -209,7 +209,7 @@ Schema
     }
     
 
-**Ответ**  `404`
+**Response**  `404`
 
 Headers
 
@@ -262,7 +262,7 @@ Schema
 **currencyPair**         `string` (обязательно) Пример: `eth_btc`
 Валютная пара
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -314,7 +314,7 @@ Schema
       ]
     }
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -350,7 +350,7 @@ Schema
       "type": "array"
     }
 
-**Ответ**  `404`
+**Response**  `404`
 
 
 Headers
@@ -406,7 +406,7 @@ Schema
 **tag**    `string` (необязательно) Пример: `123321`
 Тег назначения 
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -490,7 +490,7 @@ Schema
       ]
     }
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -547,7 +547,7 @@ Schema
         "incomingType"
       ]
     }
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -589,7 +589,7 @@ Schema
 
 
 
-**Ответ**  `400`
+**Response**  `400`
 
 
 Headers
@@ -639,7 +639,7 @@ Schema
 
 ------------
 
-#### Монеты
+#### Валюты
 
 |GET `/getcoins`|
 | ------------ |
@@ -651,7 +651,7 @@ Schema
 
 #### **Параметры URI**
 
-**Ответ**  `200`
+**Response**  `200`
 
 
 Headers
@@ -770,7 +770,7 @@ Schema
       }
     }
 
-**Ответ**  `400`
+**Response**  `400`
 
 Headers
 
@@ -825,7 +825,7 @@ Schema
 
 
 
-**Ответ**  `200`
+**Response**  `200`
 Headers
 
 
@@ -856,7 +856,7 @@ Schema
     }
 
 
-**Ответ**  `400`
+**Response**  `400`
 Headers
 
 
@@ -906,7 +906,7 @@ Schema
 **apikey**   `string` (обязательно) Пример:` 23efa324efb213a`
 Является ли приватный ключ API партнера. 
 
-**Ответ**  `200`
+**Response**  `200`
 
 Headers
 
@@ -1005,7 +1005,7 @@ Schema
       }
     }
 
-**Ответ**  `400`
+**Response**  `400`
 
 Headers
 
@@ -1054,6 +1054,316 @@ Schema
 **GET** `https://api.quickex.io/txbyaddress/3771GPPSfDixm3cy3dM6GvjzKYYqXRmQCD/23efa324efb213a/123321`
 
 #### **Параметры URI**
+
+**withdrawalAddress**    `string` (обязательно) Пример: `3771GPPSfDixm3cy3dM6GvjzKYYqXRmQCD`
+ Снятие адреса 
+
+
+**apikey**   ` string` (обязательно) Пример`: 23efa324efb213a`
+Является ли приватный ключ API партнера. 
+
+**destinationTag**    `string` (необязательно) Пример: `123321`
+Тег назначения. 
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    [
+      {
+        "inputTXID": "5306c5ed-38b6-4da0-a1c8-0e78b725ddc9",
+        "inputAddress": "0x56Dc35da0Bd2776c024Fbc14eB15CbE105059696",
+        "inputCurrency": "ETH",
+        "inputAmount": 0.0025,
+        "outputTXID": "311c56a08b3444894373476f9576a62987078fb8499878b9ca0264e893622863",
+        "outputAddress": "3771GPPSfDixm3cy3dM6GvjzKYYqXRmQCD",
+        "outputCurrency": "BTC",
+        "outputAmount": 0.00310434,
+        "status": "time_expired",
+        "destinationTag": "destination tag",
+        "withdrawalTag": "withdrawal tag"
+      }
+    ]
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "array"
+    }
+
+
+**Response**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't find transactions"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+------------
+
+#### Подтвердить адрес 
+
+|GET `/validateAddress/{address}/{currency}`|
+| ------------ |
+|Этот запрос позволяет пользователям проверить, что их адрес назначения действителен в соответствии с данным демоном кошелька. Если запрос возвращает значение «true», этот адрес проверяется демоном монеты, обозначенным символом валюты.|
+
+
+#### **Пример URI**
+**GET** `https://api.quickex.io/validateAddress/3DWFocD1xA4Ws5uREcHbKYqTY2viVMxSV5/btc`
+
+#### **Параметры URI**
+
+**address**  `string` (обязательно) Пример: `3DWFocD1xA4Ws5uREcHbKYqTY2viVMxSV5`
+Адрес
+	
+**currency **   ` string` (обязательно) Пример:` btc`
+Валюта
+
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "isvalid": true
+    }
+    
+Schema
+
+
+    
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "isvalid": {
+          "type": "boolean",
+          "description": "Is valid address"
+        }
+      },
+      "required": [
+        "isvalid"
+      ]
+    }
+
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "isvalid": false,
+      "error": "Invalid address."
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "isvalid": {
+          "type": "boolean",
+          "description": "Is valid address"
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "isvalid",
+        "error"
+      ]
+    }
+
+
+
+------------
+
+###  POST REQUESTS
+
+------------
+
+#### Создать быструю транзакцию 
+
+|POST `/quick`|
+| ------------ |
+|Этот запрос создает быструю транзакцию (без указания суммы).|
+
+
+#### **Пример URI**
+**POST** ` https://api.quickex.io / quick`
+
+#### **Параметры URI**
+
+**Request ** `with body`
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+    
+Body
+
+
+
+    {
+      "withdrawal": "qpjs462knq4anmpyyf7axypplff5s4dyyql0k9rlkc",
+      "withdrawalType": "BCH",
+      "deposit": "0x886C0620d8A59DD5D53946644a1D91326862D1e7",
+      "depositType": "ETH",
+      "orderId": "678492f6-2944-45ba-b031-8ce9f4b14141",
+      "apiPubKey": "abe1278ac423349e775",
+      "destinationTag": "destination tag",
+      "withdrawalTag": "withdrawal tag"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "withdrawal": {
+          "type": "string",
+          "description": "Withdrawal address"
+        },
+        "withdrawalType": {
+          "type": "string",
+          "description": "Withdrawal currency"
+        },
+        "deposit": {
+          "type": "string",
+          "description": "Deposit address"
+        },
+        "depositType": {
+          "type": "string",
+          "description": "Deposit currency"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Order id"
+        },
+        "apiPubKey": {
+          "type": "string",
+          "description": "Public api key"
+        },
+        "destinationTag": {
+          "type": "string",
+          "description": "destination tag"
+        },
+        "withdrawalTag": {
+          "type": "string",
+          "description": "withdrawal tag"
+        }
+      },
+      "required": [
+        "withdrawal",
+        "withdrawalType",
+        "deposit",
+        "depositType",
+        "orderId"
+      ]
+    }
+
+**Response**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't create quick transaction"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+
+------------
 
 
 
