@@ -1,7 +1,7 @@
-# Документация по API Quickex
+#  Документация по API Quickex
 ###### Communication protocol: REST
 
-### Здравствуйте!
+##  Здравствуйте!
 
 Это документация по API Quickex, которое позволяет:
 -  Создать свой криптообменник без покупки скриптов и с минимальными усилиями.
@@ -19,7 +19,7 @@
 
 
 
-### АВТОРИЗАЦИЯ
+## АВТОРИЗАЦИЯ
 
 ------------
 
@@ -59,12 +59,12 @@ Body
 
 ------------
 
-### GET REQUESTS
+## GET REQUESTS
 
 ------------
 
 
-#### **Курсы**
+### **Курсы**
 
 |GET `/rate/{currencyPair}`|
 | ------------ |
@@ -148,7 +148,7 @@ Schema
 ------------
 
 
-#### Депозитный лимит
+### Депозитный лимит
 
 |GET ` /limit/{currencyPair}`|
 | ------------ |
@@ -247,7 +247,7 @@ Schema
 ------------
 
 
-#### Marketinfo
+### Marketinfo
 
 |GET ` /marketinfo/{currencyPair}`|
 | ------------ |
@@ -387,7 +387,7 @@ Schema
 
 
 ------------
-#### Информация о запросе на обмен
+### Информация о запросе на обмен
 
 |GET `/txStat/{depositAddress}/{tag}`|
 | ------------ |
@@ -639,7 +639,7 @@ Schema
 
 ------------
 
-#### Валюты
+### Валюты
 
 |GET `/getcoins`|
 | ------------ |
@@ -807,7 +807,7 @@ Schema
 
 ------------
 
-#### Получить список последних транзакций
+### Получить список последних транзакций
 
 |GET `/recenttx/{max}`|
 | ------------ |
@@ -891,7 +891,7 @@ Schema
 
 ------------
 
-#### Получить список транзакций с закрытым ключом API
+### Получить список транзакций с закрытым ключом API
 
 |GET `/txbyapikey/{apikey}`|
 | ------------ |
@@ -1043,7 +1043,7 @@ Schema
 
 ------------
 
-#### Получить список транзакций с конкретным адресом для вывода средств и приватным ключом API 
+### Получить список транзакций с конкретным адресом для вывода средств и приватным ключом API 
 
 |GET `txbyaddress/{withdrawalAddress}/{apikey}/{destinationTag}`|
 | ------------ |
@@ -1139,7 +1139,7 @@ Schema
 
 ------------
 
-#### Подтвердить адрес 
+### Подтвердить адрес 
 
 |GET `/validateAddress/{address}/{currency}`|
 | ------------ |
@@ -1237,11 +1237,11 @@ Schema
 
 ------------
 
-###  POST REQUESTS
+##  POST REQUESTS
 
 ------------
 
-#### Создать быструю транзакцию 
+### Создать быструю транзакцию 
 
 |POST `/quick`|
 | ------------ |
@@ -1400,7 +1400,7 @@ Schema
 
 ------------
 
-#### Создать фиксированную транзакцию  
+### Создать фиксированную транзакцию  
 
 |POST `/sendamount`|
 | ------------ |
@@ -1567,3 +1567,269 @@ Schema
       ]
     }
 
+
+------------
+
+### Запрос котировочной цены
+
+|POST `/sendamount`|
+| ------------ |
+|Этот запрос вернет только информацию о котировке и не будет генерировать адрес депозита.|
+
+
+#### **Пример URI**
+**POST** ` https://api.quickex.io/sendamount `
+
+#### **Параметры URI**
+
+**Request** `with body`
+
+- amount: `0.03101415` (required, number) - Сумма, которую вы получите после обмена
+- pair: `eth_btc` (required, string) - Пара обмена
+
+Headers
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "amount": 0.03101415,
+      "pair": "eth_btc"
+    }
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "quotedRate": 1,
+      "maxLimit": 0.041028,
+      "pair": "eth_btc",
+      "withdrawalAmount": 0.001,
+      "depositAmount": 0.002,
+      "expiration": 1540456968
+    }
+    
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "quotedRate": {
+          "type": "number",
+          "description": "Quoted rate"
+        },
+        "maxLimit": {
+          "type": "number",
+          "description": "Max limit"
+        },
+        "pair": {
+          "type": "string",
+          "description": "Currency pair"
+        },
+        "withdrawalAmount": {
+          "type": "number",
+          "description": "Withdrawal amount, amount you get after exchange"
+        },
+        "depositAmount": {
+          "type": "number",
+          "description": "Deposit amount, amount you send to exchange"
+        },
+        "expiration": {
+          "type": "number",
+          "description": "Expiration time for deposit"
+        }
+      },
+      "required": [
+        "quotedRate",
+        "maxLimit",
+        "pair",
+        "withdrawalAmount",
+        "depositAmount",
+        "expiration"
+      ]
+    }
+**Response**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't create fixed amount transaction"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+    
+
+
+------------
+
+### Отмена ожидаемой транзакции
+
+
+|POST `/cancelpending`|
+| ------------ |
+|Позволяет пользователям запрашивать отмену транзакции, выбранной по адресу депозита.|
+
+
+#### **Пример URI**
+**POST** `https://api.quickex.io/cancelpending`
+
+#### **Параметры URI**
+
+**Request** `with body`
+
+
+
+- address: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес депозита, связанный с ожидающей транзакцией
+
+- tag: `destination tag` (optional, string) - destination tag
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "address": "12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct",
+      "tag": "destination tag"
+    }
+
+
+
+**Response**  `200`
+
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "success": "Exchange request successfully update",
+      "error": "null"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "string",
+          "description": "Success message"
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message (always null)"
+        }
+      },
+      "required": [
+        "success",
+        "error"
+      ]
+    }
+
+
+**Response**  `400`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "error": "Can't cancel pending transaction"
+    }
+
+Schema
+
+
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+
+------------
+
+### Получить результат транзакции по электронной почте
+
+
+|POST `/cancelpending`|
+| ------------ |
+|Позволяет пользователям запрашивать отмену транзакции, выбранной по адресу депозита.|
+
+
+#### **Пример URI**
+**POST** `https://api.quickex.io/cancelpending`
+
+#### **Параметры URI**
+
+**Request** `with body`
