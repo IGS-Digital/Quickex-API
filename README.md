@@ -1,12 +1,11 @@
 #  Документация по API Quickex
 ###### Communication protocol: REST
 
-##  Здравствуйте!
 
 Это документация по API Quickex, которое позволяет:
 -  Создать свой криптообменник без покупки скриптов и с минимальными усилиями.
 -  Расширить предложение уже существующего обменника электронных или цифровых валют.
-- Подключить оплату криптовалютой в интернет магазине
+- Подключить оплату криптовалютой в интернет магазине.
 - Расширить возможности криптокошелька подключив на нем обмен имеющихся валют.
 
 Ниже вы можете найти описания каждого доступного запроса / метода.
@@ -64,7 +63,7 @@ Body
 ------------
 
 
-### **Курсы**
+### **Запрос курсов**
 
 |GET `/rate/{currencyPair}`|
 | ------------ |
@@ -152,7 +151,7 @@ Schema
 
 |GET ` /limit/{currencyPair}`|
 | ------------ |
-|Этот запрос получает ограничение на количество базовой валюты, которое может быть обменено, как установлено Quickex в данный момент. Любая избыточная сумма будет отправлена ​​на адрес возврата. Это значение может быть изменено из-за внезапных колебаний рынка.|
+|Этот запрос получает ограничение на количество базовой валюты, которое может быть обменено, как установлено Quickex в данный момент. Любая избыточная сумма будет отправлена на адрес возврата. Это значение может меняться из-за внезапных колебаний рынка.|
 
 #### **Пример URI**
 **GET** `https://api.quickex.io/limit/eth_btc`
@@ -387,7 +386,7 @@ Schema
 
 
 ------------
-### Информация о запросе на обмен
+### Информация о деталях транзакции
 
 |GET `/txStat/{depositAddress}/{tag}`|
 | ------------ |
@@ -639,7 +638,7 @@ Schema
 
 ------------
 
-### Валюты
+### Поддерживаемые валюты
 
 |GET `/getcoins`|
 | ------------ |
@@ -1420,7 +1419,7 @@ Schema
 > Предупреждение! ¶
 Если параметр `amount` пропущен, то  `depositAmount` не используется.
 
-- depositAmount: `1` (optional, number) - Сумма депозита, сумма, которую вы отправляете на обмен
+- depositAmount: `1` (необязательно) - Сумма депозита, сумма, которую вы отправляете на обмен
 
 
 > Предупреждение! ¶
@@ -1428,14 +1427,14 @@ Schema
 
 - withdrawal: `12v4rjzyXnRF7dwNb4ukxTpYrugBTy6nct` (required, string) - Адрес получателя
 
-- pair: `eth_btc` (required, string) - Пары обмена 
+- pair: `eth_btc` (обязательно) - Пары обмена 
 
 - returnAddress: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес возврата (для сдачи) в случае если клиент перевел сумму выше нашего лимита
 
-- destinationTag: `destination tag` (optional, string) - destination tag
+- destinationTag: `destination tag` (необязательно) - destination tag
 
-- withdrawalTag: `withdrawal tag` (optional, string) - withdrawal tag
-- apiKey: `234eac2234a423f` (optional, string) - Публичный api ключ
+- withdrawalTag: `withdrawal tag` (необязательно) - withdrawal tag
+- apiKey: `234eac2234a423f` (необязательно) - Публичный api ключ
 
 **Response**  `201`
 
@@ -1574,7 +1573,7 @@ Schema
 
 |POST `/sendamount`|
 | ------------ |
-|Этот запрос вернет только информацию о котировке и не будет генерировать адрес депозита.|
+|Этот запрос вернет информацию только о котировке и не будет генерировать адрес депозита.|
 
 
 #### **Пример URI**
@@ -1584,8 +1583,8 @@ Schema
 
 **Request** `with body`
 
-- amount: `0.03101415` (required, number) - Сумма, которую вы получите после обмена
-- pair: `eth_btc` (required, string) - Пара обмена
+- amount: `0.03101415` (обязательно) - Сумма, которую вы получите после обмена
+- pair: `eth_btc` (обязательно) - Пара обмена
 
 Headers
 
@@ -1719,9 +1718,9 @@ Schema
 
 
 
-- address: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (required, string) - Адрес депозита, связанный с ожидающей транзакцией
+- address: `0xd68CcC74C32BAB4c4c6F289b3b1754f46a8311FE` (обязательно) - Адрес депозита, связанный с транзакцией
 
-- tag: `destination tag` (optional, string) - destination tag
+- tag: `destination tag` (обязательно) - destination tag
 
 Headers
 
@@ -1822,14 +1821,119 @@ Schema
 ### Получить результат транзакции по электронной почте
 
 
-|POST `/cancelpending`|
+|POST `/mail`|
 | ------------ |
-|Позволяет пользователям запрашивать отмену транзакции, выбранной по адресу депозита.|
+|Этот запрос позволяет получить идентификатор транзакции и результат по электронной почте.|
 
 
 #### **Пример URI**
-**POST** `https://api.quickex.io/cancelpending`
+**POST** `https://api.quickex.io/mail`
 
 #### **Параметры URI**
 
 **Request** `with body`
+
+
+
+ - email: `test@example.com` (обязательно) - Email
+
+-  txid: `038d2bd3-8e31-4a01-9c55-f57a23f307d7` (обязательно) - ID транзакции
+
+Headers
+
+
+
+    Content-Type: application/json
+    
+Body
+
+
+
+    {
+      "email": "test@example.com",
+      "txid": "038d2bd3-8e31-4a01-9c55-f57a23f307d7"
+    }
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "email": {
+        "status": "success",
+        "message": "Email receipt sent"
+      }
+    }
+
+Schema
+
+
+
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message"
+        }
+      }
+    }
+**Response**  `400`
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "email": {
+        "status": "fail",
+        "message": "Can't send message to email"
+      }
+    }
+
+Schema
+
+
+
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "message": {
+          "type": "string",
+          "description": "Fail message"
+        }
+      }
+    }
+
+
+
+
+------------
+Если возникнут вопросы по интеграции, мы с радостью ответим:
+Email: [support@quickex.io](mailto:support@quickex.io "технической поддержки")
+Telegram: [@Quickex](https://t.me/quickex "@Quickex")
+
+
+
+© 2017-2019 [Quickex.io](https://quickex.io/ "Quickex.io")
