@@ -1,12 +1,11 @@
 #  Документация по API Quickex
 ###### Communication protocol: REST
 
-###  Здравствуйте!
 
 Это документация по API Quickex, которое позволяет:
 -  Создать свой криптообменник без покупки скриптов и с минимальными усилиями.
 -  Расширить предложение уже существующего обменника электронных или цифровых валют.
-- Подключить оплату криптовалютой в интернет магазине
+- Подключить оплату криптовалютой в интернет магазине.
 - Расширить возможности криптокошелька подключив на нем обмен имеющихся валют.
 
 Ниже вы можете найти описания каждого доступного запроса / метода.
@@ -1822,14 +1821,119 @@ Schema
 ### Получить результат транзакции по электронной почте
 
 
-|POST `/cancelpending`|
+|POST `/mail`|
 | ------------ |
-|Позволяет пользователям запрашивать отмену транзакции, выбранной по адресу депозита.|
+|Этот запрос позволяет получить идентификатор транзакции и результат по электронной почте.|
 
 
 #### **Пример URI**
-**POST** `https://api.quickex.io/cancelpending`
+**POST** `https://api.quickex.io/mail`
 
 #### **Параметры URI**
 
 **Request** `with body`
+
+
+
+ - email: `test@example.com` (required, string) - Email
+
+-  txid: `038d2bd3-8e31-4a01-9c55-f57a23f307d7` (required, string) - ID транзакции
+
+Headers
+
+
+
+    Content-Type: application/json
+    
+Body
+
+
+
+    {
+      "email": "test@example.com",
+      "txid": "038d2bd3-8e31-4a01-9c55-f57a23f307d7"
+    }
+
+**Response**  `200`
+
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "email": {
+        "status": "success",
+        "message": "Email receipt sent"
+      }
+    }
+
+Schema
+
+
+
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message"
+        }
+      }
+    }
+**Response**  `400`
+Headers
+
+
+
+    Content-Type: application/json
+
+Body
+
+
+
+    {
+      "email": {
+        "status": "fail",
+        "message": "Can't send message to email"
+      }
+    }
+
+Schema
+
+
+
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "message": {
+          "type": "string",
+          "description": "Fail message"
+        }
+      }
+    }
+
+
+
+
+------------
+Если возникнут вопросы по интеграции, мы с радостью ответим:
+Email: [support@quickex.io](mailto:support@quickex.io "технической поддержки")
+Telegram: [@Quickex](https://t.me/quickex "@Quickex")
+
+
+
+© 2017-2019 [Quickex.io](https://quickex.io/ "Quickex.io")
