@@ -1153,7 +1153,7 @@ Schema
 **address**  `string` (обязательно) Пример: `3DWFocD1xA4Ws5uREcHbKYqTY2viVMxSV5`
 Адрес
 	
-**currency **   ` string` (обязательно) Пример:` btc`
+**currency**   ` string` (обязательно) Пример:` btc`
 Валюта
 
 
